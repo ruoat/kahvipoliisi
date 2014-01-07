@@ -1,4 +1,5 @@
 import cv2, time
+import numpy as np
 from threading import Thread
 from SocketServer import ThreadingMixIn
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
@@ -9,6 +10,8 @@ cam = None
 camera_index = 0
 width = 320
 height = 240
+
+current_capture = None
 
 def initialize_camera():
 	global cam
@@ -30,6 +33,13 @@ def cap():
 	if not f:
 		exit(1)
 	#f,image = cam.read()
+#	global current_capture
+#	current_capture = numpy.array(cv2.imencode('jpg', image))
+#	buf = np.array([1, 2, 3], ndmin=2)
+	#buf = cv2.fromarray(np.zeros((width, height), np.uint8))
+#	print buf
+#	cv2.imencode('.jpeg', image, buf)
+#	print buf
 	cv2.imwrite("capture.jpg", image)
 	print "Captured", width, height
 
@@ -46,6 +56,7 @@ class Handler(BaseHTTPRequestHandler):
 		        self.send_response(200)
         		self.send_header("Content-type", "image/jpeg")
 		        self.end_headers()
+			#self.wfile.write(current_capture)
 	       	 	self.wfile.write(f.read())
 			f.close()
 			return
