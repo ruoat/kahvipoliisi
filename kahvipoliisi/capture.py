@@ -33,14 +33,15 @@ def cap():
 	if not f:
 		exit(1)
 	#f,image = cam.read()
-#	global current_capture
+	global current_capture
 #	current_capture = numpy.array(cv2.imencode('jpg', image))
 #	buf = np.array([1, 2, 3], ndmin=2)
 	#buf = cv2.fromarray(np.zeros((width, height), np.uint8))
 #	print buf
-#	cv2.imencode('.jpeg', image, buf)
-#	print buf
-	cv2.imwrite("capture.jpg", image)
+	_, buf = cv2.imencode('.jpeg', image)
+	current_capture = np.array(buf).tostring()
+	#print buf
+	#cv2.imwrite("capture.jpg", image)
 	print "Captured", width, height
 
 def capture_forever():
@@ -52,13 +53,13 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
 	try:
 		if self.path.endswith("capture.jpg"):
-			f = open(curdir + sep + self.path, 'rb')
+			#f = open(curdir + sep + self.path, 'rb')
 		        self.send_response(200)
         		self.send_header("Content-type", "image/jpeg")
 		        self.end_headers()
-			#self.wfile.write(current_capture)
-	       	 	self.wfile.write(f.read())
-			f.close()
+			self.wfile.write(current_capture)
+	       	 	#self.wfile.write(f.read())
+			#f.close()
 			return
 	except IOError:
             self.send_error(404,'File Not Found: %s' % self.path)

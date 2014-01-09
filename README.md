@@ -12,7 +12,9 @@ TODO
 
 Install OpenCV
 --------------
-Note rasbian supports only OpenCV 2.3.1
+Note rasbian wheezy supports only OpenCV 2.3.1.
+Use rasbpian jessie to get 2.4.6.1
+
 
 ```sh
 sudo apt-get install python-opencv
